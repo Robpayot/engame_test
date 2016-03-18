@@ -13,8 +13,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-
 <?php wp_head(); ?>
+	<script>
+		//Have we ever setup on this website
+		if(localStorage.getItem("eg-obj")){
+			//Check elapsed time
+			var elapsedTime = Date.now() - localStorage.getItem("eg-time");
+			console.log('Elapsed time no mans land (BackEnd) : ' + String(elapsedTime) + ' milliseconds');
+
+			//If time > 3 seconds, load the game
+			if(elapsedTime > 3000){
+				//Instantiate the game from localStorage
+				var enGame = localStorage.getItem("eg-obj");
+				if(enGame){
+					console.log("Load the engame", enGame);
+				}
+			}
+		}
+		//Same as DOMContentLoaded but IE ok
+		document.onreadystatechange = function (e) {
+			console.log(document.readyState);
+		    if (document.readyState == "interactive") {
+
+				if(localStorage.getItem("eg-obj")){
+					//Delete the EnGame
+					localStorage.removeItem("eg-obj");
+
+					elapsedTime = Date.now() - localStorage.getItem("eg-time");
+					console.log('Elapsed time on dom content loaded (FrontEnd) : ' + String(elapsedTime) + ' milliseconds');
+				}
+
+				//Load the selected game in async
+				var enGameLoaded = {};
+
+				//Put it in the localStorage
+				localStorage.setItem("eg-obj", enGameLoaded);
+		    }
+		}
+
+		//When user quit the page
+		window.onbeforeunload = function (e) {
+			//Store the date
+			var nStartTime = Date.now();
+			localStorage.setItem("eg-time", nStartTime);
+		};
+
+	</script>
 </head>
 
 <body <?php body_class(); ?>>

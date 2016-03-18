@@ -11,19 +11,35 @@ General
 html,
 body {
   background-color: #000;
+  background: transparent;
   height: 100%;
 }
 
 body {
+
   background: #222;
   background: -webkit-radial-gradient(#333, #111);
   background: radial-gradient(#333, #111);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+  background: white;
   color: #fff;
   font: 100%/1.5 sans-serif;
   overflow: hidden;
+  padding-top: 25px;
+}
+
+.text{
+    display: inline-block;
+    background: #dd5454;
+    padding: 10px;
+    color: white;
+    font-family: sans-serif;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 /*================================================
@@ -33,11 +49,12 @@ Score
 ================================================*/
 
 .score {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.8);
+  padding-right: 5%;
   font-size: 16px;
   font-weight: bold;
-  padding-top: 5px;
-  text-align: center;
+  padding-top: 5%;
+  text-align: right;
 }
 
 /*================================================
@@ -110,25 +127,25 @@ Tiles
 }
 
 .tile.up:before {
-  border-bottom: 4px inset rgba(255, 255, 255, 0.15);
+  border-bottom: 4px inset rgba(0, 0, 0, 0.15);
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
 }
 
 .tile.down:before {
-  border-top: 4px inset rgba(255, 255, 255, 0.15);
+  border-top: 4px inset rgba(0, 0, 0, 0.15);
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
 }
 
-.tile.left:before { 
-  border-right: 4px inset rgba(255, 255, 255, 0.15);
+.tile.left:before {
+  border-right: 4px inset rgba(0, 0, 0, 0.15);
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
 }
 
-.tile.right:before { 
-  border-left: 4px inset rgba(255, 255, 255, 0.15);
+.tile.right:before {
+  border-left: 4px inset rgba(0, 0, 0, 0.15);
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
 }
@@ -152,8 +169,8 @@ Tiles
 }
 
 .tile.pressed {
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.6);
   -webkit-transition-duration: 0ms;
           transition-duration: 0ms;
 }

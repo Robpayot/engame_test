@@ -11,7 +11,7 @@ Polyfill
   Request Animation Frame
 
   ================================================*/
-  
+
   var lastTime = 0;
   var vendors = [ 'webkit', 'moz' ];
   for( var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x ) {
@@ -24,8 +24,8 @@ Polyfill
       var currTime = new Date().getTime();
       var timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
       var id = window.setTimeout(
-        function() { 
-          callback( currTime + timeToCall ); 
+        function() {
+          callback( currTime + timeToCall );
         }, timeToCall );
       lastTime = currTime + timeToCall;
       return id;
@@ -185,7 +185,7 @@ Utilities
   Random
 
   ================================================*/
-  
+
   g.util.rand = function( min, max ) {
     return g.m.random() * ( max - min ) + min;
   };
@@ -249,7 +249,7 @@ Time
   g.Time.prototype.update = function() {
     this.now = Date.now();
     this.delta = this.now - this.last;
-    this.ndelta = Math.min( Math.max( this.delta / ( 1000 / 60 ), 0.0001 ), 10 );
+    this.ndelta = Math.min( Math.max( this.delta / ( 1000 / 90 ), 0.0001 ), 10 );
     this.elapsed += this.delta;
     this.nelapsed += this.ndelta;
     this.last = this.now;
@@ -446,7 +446,7 @@ Snake Tile Entity
     this.elem.style.top = this.y + 'px';
     this.elem.style.width = this.w + 'px';
     this.elem.style.height = this.h + 'px';
-    this.elem.style.backgroundColor = 'rgba(255, 255, 255, ' + this.alpha + ')';
+    this.elem.style.backgroundColor = 'rgba(0, 0, 0, ' + this.alpha + ')';
     this.elem.style.boxShadow = '0 0 ' + this.blur + 'px #fff';
     this.elem.style.borderRadius = this.borderRadius;
   };
@@ -507,8 +507,8 @@ Food Tile Entity
     this.elem.style.width = this.w + 'px';
     this.elem.style.height = this.h + 'px';
     this.elem.style[ Modernizr.prefixed( 'transform' ) ] = 'translateZ(0) scale(' + this.scale + ')';
-    this.elem.style.backgroundColor = 'hsla(' + this.hue + ', 100%, 60%, 1)';
-    this.elem.style.boxShadow = '0 0 ' + this.blur + 'px hsla(' + this.hue + ', 100%, 60%, 1)';
+    this.elem.style.backgroundColor = 'hsla(' + this.hue + ', 80%, 60%, 1)';
+    this.elem.style.boxShadow = '0 0 ' + this.blur + 'px hsla(' + this.hue + ', 80%, 60%, 1)';
     this.elem.style.opacity = this.opacity;
   };
 
@@ -543,7 +543,7 @@ Snake Entity
     this.updateTick = 10;
     this.updateTickMax = this.updateTick;
     this.updateTickLimit = 3;
-    this.updateTickChange = 0.2;
+    this.updateTickChange = 0.4;
     this.deathFlag = 0;
     this.justAteTick = 0;
     this.justAteTickMax = 1;
@@ -674,6 +674,7 @@ Snake Entity
           this.updateTickMax -= this.updateTickChange;
         }
         this.parentState.score++;
+        localStorage.setItem("engame-snake", this.parentState.score);
         this.parentState.scoreElem.innerHTML = this.parentState.score;
         this.justAteTick = this.justAteTickMax;
 
@@ -681,7 +682,7 @@ Snake Entity
         this.parentState.stageElem.removeChild( this.parentState.food.tile.elem );
 
         var _this = this;
-        
+
         this.foodCreateTimeout = setTimeout( function() {
           _this.parentState.food = new g.Food({
             parentState: _this.parentState
@@ -955,6 +956,7 @@ Game
     g.time.update();
   };
 
-  window.addEventListener( 'load', g.step, false );
+  g.step();
+  //window.addEventListener( 'load', g.step, false );
 
 })();
