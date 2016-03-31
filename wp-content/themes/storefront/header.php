@@ -69,11 +69,18 @@
 
 				enGameLoaded = (function() {
 
+
 					var _container = document.createElement('div');
 					var _content = document.createElement('p').appendChild( document.createTextNode('Loading...') );
+					console.log('append')
 				    _container.appendChild(_content);
-					_container.setAttribute('style', 'position:fixed;top:0;left:0;z-index:9999999;width:100%;height:100%;background:#fff;');
+					_container.setAttribute('style', 'color:black;transition: all ease 2s;position:fixed;top:0;left:0;z-index:9999999;width:100%;height:100%;background:#fff;');
+					setTimeout(function(){ 
+						console.log('start anim')
+						_container.setAttribute('style', 'color:red;transition: all ease 2s;position:fixed;top:0;left:0;z-index:9999999;width:100%;height:100%;background:#fff;'); 
+					}, 10);
 
+					
 					return {
 
 						create: function(){
