@@ -14,40 +14,89 @@
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 <?php wp_head(); ?>
+
+</head>
+
+<body <?php body_class(); ?>>
+
 	<script>
 		//Have we ever setup on this website
-		if(localStorage.getItem("eg-obj")){
+		var enGameLocal = null;
+
+		if(localStorage.egObj){
 			//Check elapsed time
-			var elapsedTime = Date.now() - localStorage.getItem("eg-time");
+			var elapsedTime = Date.now() - localStorage.egTime;
 			console.log('Elapsed time no mans land (BackEnd) : ' + String(elapsedTime) + ' milliseconds');
 
-			//If time > 3 seconds, load the game
-			if(elapsedTime > 3000){
+			if(elapsedTime > 30000){
+
+				//It's been there for a very long time
+				localStorage.clear();
+
+			}else if(elapsedTime > 1000){
+				//If time > 3 seconds, load the content
 				//Instantiate the game from localStorage
-				var enGame = localStorage.getItem("eg-obj");
+				var enGame = localStorage.egObj;
 				if(enGame){
-					console.log("Load the engame", enGame);
+					console.log("Object loaded from localStorage");
+
+					enGameLocal = new Function("return ("+JSON.parse(enGame)+")")()();
+
+					enGameLocal.draw();
 				}
 			}
 		}
+
+		var enGameLoaded = null;
 		//Same as DOMContentLoaded but IE ok
 		document.onreadystatechange = function (e) {
+
 			console.log(document.readyState);
+
 		    if (document.readyState == "interactive") {
 
-				if(localStorage.getItem("eg-obj")){
+				if(localStorage.egObj){
 					//Delete the EnGame
-					localStorage.removeItem("eg-obj");
+					localStorage.removeItem("egObj");
 
-					elapsedTime = Date.now() - localStorage.getItem("eg-time");
+					elapsedTime = Date.now() - localStorage.getItem("egTime");
 					console.log('Elapsed time on dom content loaded (FrontEnd) : ' + String(elapsedTime) + ' milliseconds');
+
+					enGameLocal.dispose();
 				}
 
 				//Load the selected game in async
-				var enGameLoaded = {};
+
+				enGameLoaded = (function() {
+
+					var _container = document.createElement('div');
+					var _content = document.createElement('p').appendChild( document.createTextNode('Loading...') );
+				    _container.appendChild(_content);
+					_container.setAttribute('style', 'position:fixed;top:0;left:0;z-index:9999999;width:100%;height:100%;background:#fff;');
+
+					return {
+
+						create: function(){
+
+						},
+
+						draw: function(){
+							document.body.appendChild(_container);
+						},
+
+						dispose: function(){
+							document.body.removeChild(_container);
+						},
+
+						destroy: function(){
+
+						}
+					}
+
+				});
 
 				//Put it in the localStorage
-				localStorage.setItem("eg-obj", enGameLoaded);
+				localStorage.egObj = JSON.stringify(enGameLoaded.toString());
 		    }
 		}
 
@@ -55,13 +104,15 @@
 		window.onbeforeunload = function (e) {
 			//Store the date
 			var nStartTime = Date.now();
-			localStorage.setItem("eg-time", nStartTime);
+			localStorage.setItem("egTime", nStartTime);
+
+			if(enGameLoaded && enGameLoaded != null && enGameLoaded != undefined){
+				enGameLoaded().draw();
+			}
 		};
 
 	</script>
-</head>
 
-<body <?php body_class(); ?>>
 <div id="page" class="hfeed site">
 	<?php
 	do_action( 'storefront_before_header' ); ?>
